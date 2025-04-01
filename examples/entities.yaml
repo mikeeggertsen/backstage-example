@@ -19,25 +19,42 @@ spec:
   lifecycle: experimental
   owner: guests
   system: examples
-  providesApis: [example-grpc-api]
 ---
 # https://backstage.io/docs/features/software-catalog/descriptor-format#kind-api
 apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
-  name: example-grpc-api
+  name: kong-example
+  annotations:
+    github.com/project-slug: 'mikeeggertsen/kong-example'
 spec:
-  type: grpc
+  type: openapi
   lifecycle: experimental
   owner: guests
   system: examples
   definition: |
-    syntax = "proto3";
-
-    service Exampler {
-      rpc Example (ExampleMessage) returns (ExampleMessage) {};
-    }
-
-    message ExampleMessage {
-      string example = 1;
-    };
+    openapi: "3.0.0"
+    info:
+      version: 1.0.0
+      title: Kong API Gateway Example
+      license:
+        name: MIT
+    servers:
+      - url: http://localhost:8000
+    paths:
+      /health:
+        get:
+          summary: Check if service is up
+          responses:
+            '200': 
+              description: Returns OK
+              content:
+                text/plain
+      /hello-world:
+        get:
+          summary: Get 'Hello World' string
+          responses:
+            '200':
+              description: Returns 'Hello World'
+              content:
+                text/plain
